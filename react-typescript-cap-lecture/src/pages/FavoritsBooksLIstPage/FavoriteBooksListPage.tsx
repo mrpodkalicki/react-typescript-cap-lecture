@@ -80,7 +80,7 @@ export const FavoriteBooksPage = () => {
                                 <BookItem key={index}
                                           id={index}
                                           title={item.title}
-                                          authors={item.authors ? item.authors[0] : ''}
+                                          authors={item.authors ? item.authors : ''}
                                           url={item.url}
                                           checkedBoxes={checkedBoxes}
                                           onClickCheckbox={handleCheckboxToggle}

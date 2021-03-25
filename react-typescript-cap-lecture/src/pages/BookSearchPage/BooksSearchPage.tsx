@@ -12,7 +12,6 @@ import {BookDto} from "../../dto/book.dto";
 import {AppSpinner, spinnerHide, spinnerShow} from "../../components/AppSpinner";
 import {LocalStorageContext} from "../AppWrapper";
 
-
 const saveBooksToLocalStorage = (listBooks: BookDto[], key: string) => {
     const favoriteBooks: string | null = localStorage.getItem('favoriteBooks');
     if (favoriteBooks) {
@@ -32,11 +31,11 @@ export const BookSearchPage: FC = () => {
     const [booksList, setBooksList] = React.useState<BookSearchRespItemDto[]>([]);
     const [checkedBoxes, setCheckedBoxes] = React.useState<number[]>([]);
 
-    const handlerInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     };
 
-    const handleSearchSubmit = () => {
+    const handleSearchBtn = () => {
         spinnerShow(setShowSpinner);
         setCheckedBoxes([]);
         setBooksList([]);
@@ -63,7 +62,7 @@ export const BookSearchPage: FC = () => {
         setCheckedBoxes([...checkedBoxes]);
      };
 
-    const handleSaveSubmit = () => {
+    const handleSaveBtn = () => {
         spinnerShow(setShowSpinner);
         const listBooksToSave: BookDto[] = [];
         booksList.forEach((itemBooks: BookSearchRespItemDto, index: number) => {
@@ -83,7 +82,7 @@ export const BookSearchPage: FC = () => {
         if (checkedBoxes.length > 0) {
             return (
                 <Button
-                    onClick={handleSaveSubmit}
+                    onClick={handleSaveBtn}
                     variant="contained"
                     color="primary"
                     size="large"
@@ -99,9 +98,9 @@ export const BookSearchPage: FC = () => {
     return (
         <>
             <Box display="flex" flexDirection="center" margin={'0 0 5rem 0'}>
-                <TextField value={inputValue} onChange={handlerInputChange} fullWidth={true} id="standard-search" label="Search field" type="search" />
+                <TextField value={inputValue} onChange={handleInputValue} fullWidth={true} id="standard-search" label="Search field" type="search" />
                 <Box padding="15px 0 0 40px">
-                    <Button onClick={handleSearchSubmit} type="submit" variant="contained" color="primary">
+                    <Button onClick={handleSearchBtn} type="submit" variant="contained" color="primary">
                         Search
                     </Button>
                 </Box>

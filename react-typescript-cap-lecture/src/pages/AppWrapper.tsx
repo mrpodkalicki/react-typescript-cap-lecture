@@ -1,5 +1,5 @@
-import React, {FC, createContext} from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import React, {createContext, FC} from 'react';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,7 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SearchIcon from '@material-ui/icons/Search';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {UiUrl} from "./utils/uiUrl";
 
 const drawerWidth = 240;

@@ -23,7 +23,7 @@ export const BookItem = ({id, title, authors, url, checkedBoxes, onClickCheckbox
                     checked={checkedBoxes.indexOf(id) !== -1}
                     tabIndex={-1}
                     disableRipple
-                    inputProps={{ 'aria-labelledby': '' + `checkbox-list-label-${id}` }}
+                    inputProps={{ 'aria-labelledby': `checkbox-list-label-${id}` }}
                 />
             </ListItemIcon>
             <ListItemText primary={`${authors ? authors + ' - ' : ''} ${title} `} />
