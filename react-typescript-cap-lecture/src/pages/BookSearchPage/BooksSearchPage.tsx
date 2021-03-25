@@ -99,7 +99,7 @@ export const BookSearchPage: FC = () => {
         </Box>
         <Box >
             <Typography variant="h5">
-                Books list:
+                Search results:
             </Typography>
         </Box>
         <List className={classes.booksList} >
@@ -123,7 +123,7 @@ export const BookSearchPage: FC = () => {
 
 const useStyles = makeStyles(() => ({
     booksList: {
-        maxHeight: '40vh',
+        maxHeight: '50vh',
         overflow: 'auto',
     },
     saveBtn: {
