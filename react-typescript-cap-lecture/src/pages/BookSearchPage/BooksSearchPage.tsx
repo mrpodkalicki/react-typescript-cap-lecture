@@ -2,13 +2,14 @@ import React, {FC, useState} from 'react';
 import {List, TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import {getSearchBooksUrl} from "../utils/api-url";
+import {getSearchBooksUrl} from "../utils/apiUrl";
 import {BookSearchRespDto, BookSearchRespItemDto} from "../../dto/book-search-resp.dto";
 import Typography from "@material-ui/core/Typography";
 import {BookItem} from "../../components/BookItem";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from "@material-ui/icons/Save";
 import {BookDto} from "../../dto/book.dto";
+import {AppSpinner, spinnerHide, spinnerShow} from "../../components/AppSpinner";
 
 
 const saveBooksToLocalStorage = (listBooks: BookDto[]) => {
@@ -24,6 +25,7 @@ const saveBooksToLocalStorage = (listBooks: BookDto[]) => {
 
 export const BookSearchPage: FC = () => {
     const classes = useStyles();
+    const [isShowSpinner, setShowSpinner] = useState<number>(0);
     const [inputValue, setInputValue] = useState<string>('');
     const [booksList, setBooksList] = React.useState<BookSearchRespItemDto[]>([]);
     const [checkedBoxes, setCheckedBoxes] = React.useState<number[]>([]);
@@ -33,16 +35,20 @@ export const BookSearchPage: FC = () => {
     };
 
     const handleSearchSubmit = () => {
+        spinnerShow(setShowSpinner);
         setCheckedBoxes([]);
         setBooksList([]);
         const url: string = getSearchBooksUrl(inputValue);
-        fetch(url)
-            .then(res => res.json())
-            .then(
-                (result: BookSearchRespDto) => {
-                    setBooksList(result.items);
-                }
-            );
+        if (url) {
+            fetch(url)
+                .then(res => res.json())
+                .then(
+                    (result: BookSearchRespDto) => {
+                        setBooksList(result.items);
+                        spinnerHide(setShowSpinner);
+                    }
+                );
+        }
     }
 
     const handleCheckboxToggle = (value: number) => {
@@ -56,6 +62,7 @@ export const BookSearchPage: FC = () => {
      };
 
     const handleSaveSubmit = () => {
+        spinnerShow(setShowSpinner);
         const listBooksToSave: BookDto[] = [];
         booksList.forEach((itemBooks: BookSearchRespItemDto, index: number) => {
             if (checkedBoxes.indexOf(index) !== -1) {
@@ -67,10 +74,11 @@ export const BookSearchPage: FC = () => {
             }
         });
         saveBooksToLocalStorage(listBooksToSave);
+        spinnerHide(setShowSpinner);
     };
 
     const getSaveBtn = (): JSX.Element | void => {
-        if (booksList.length > 0) {
+        if (checkedBoxes.length > 0) {
             return (
                 <Button
                     onClick={handleSaveSubmit}
@@ -86,8 +94,7 @@ export const BookSearchPage: FC = () => {
         }
         return;
     }
-
-    return(
+    return (
         <>
             <Box display="flex" flexDirection="center" margin={'0 0 5rem 0'}>
                 <TextField value={inputValue} onChange={handlerInputChange} fullWidth={true} id="standard-search" label="Search field" type="search" />
@@ -96,27 +103,33 @@ export const BookSearchPage: FC = () => {
                         Search
                     </Button>
                 </Box>
-        </Box>
-        <Box >
-            <Typography variant="h5">
-                Search results:
-            </Typography>
-        </Box>
-        <List className={classes.booksList} >
-            {booksList.map((item: BookSearchRespItemDto, index: number) => {
-                return (
-                   <BookItem key={index}
-                             id={index}
-                             title={item.volumeInfo.title}
-                             authors={item.volumeInfo.authors ? item.volumeInfo.authors[0] : ''}
-                             url={item.volumeInfo.infoLink}
-                             checkedBoxes={checkedBoxes}
-                             onClickCheckbox={handleCheckboxToggle}
-                   />
-                )
-            })}
-        </List>
-        {getSaveBtn()}
+            </Box>
+            <Box >
+                <Typography variant="h5">
+                    Search results:
+                </Typography>
+            </Box>
+            {
+                isShowSpinner ?
+                    <AppSpinner/>
+                    :
+                    <List className={classes.booksList} >
+                        {booksList?.map((item: BookSearchRespItemDto, index: number) => {
+                            return (
+                                <BookItem key={index}
+                                          id={index}
+                                          title={item.volumeInfo.title}
+                                          authors={item.volumeInfo.authors ? item.volumeInfo.authors[0] : ''}
+                                          url={item.volumeInfo.infoLink}
+                                          checkedBoxes={checkedBoxes}
+                                          onClickCheckbox={handleCheckboxToggle}
+                                />
+                            )
+                        })}
+                    </List>
+            }
+
+            {getSaveBtn()}
         </>
     )
 };

@@ -3,7 +3,7 @@ import {BookSearchPage} from "./BookSearchPage/BooksSearchPage";
 import {FavoriteBooksPage} from "./FavoritsBooksLIstPage/FavoriteBooksListPage";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {AppWrapper} from "./AppWrapper";
-import {UiUrl} from "./utils/ui-url";
+import {UiUrl} from "./utils/uiUrl";
 
 
 export const Root = () => {

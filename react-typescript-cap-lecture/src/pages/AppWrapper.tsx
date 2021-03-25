@@ -13,7 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SearchIcon from '@material-ui/icons/Search';
 import { useHistory } from 'react-router-dom';
-import {UiUrl} from "./utils/ui-url";
+import {UiUrl} from "./utils/uiUrl";
 
 const drawerWidth = 240;
 
