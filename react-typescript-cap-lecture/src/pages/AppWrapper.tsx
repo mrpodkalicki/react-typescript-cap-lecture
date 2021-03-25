@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, createContext} from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,6 +16,8 @@ import { useHistory } from 'react-router-dom';
 import {UiUrl} from "./utils/uiUrl";
 
 const drawerWidth = 240;
+const favoriteBooksKeyLocalStorage = 'favoriteBooks';
+export const LocalStorageContext = createContext('');
 
 export const AppWrapper: FC = ({children}) => {
     const classes = useStyles();
@@ -54,7 +56,9 @@ export const AppWrapper: FC = ({children}) => {
                 <Divider />
             </Drawer>
             <main className={classes.content}>
-                {children}
+                <LocalStorageContext.Provider value={favoriteBooksKeyLocalStorage}>
+                    {children}
+                </LocalStorageContext.Provider>
             </main>
         </div>
     );

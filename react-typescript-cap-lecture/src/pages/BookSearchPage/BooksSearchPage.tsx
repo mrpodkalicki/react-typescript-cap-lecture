@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {List, TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -10,20 +10,22 @@ import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from "@material-ui/icons/Save";
 import {BookDto} from "../../dto/book.dto";
 import {AppSpinner, spinnerHide, spinnerShow} from "../../components/AppSpinner";
+import {LocalStorageContext} from "../AppWrapper";
 
 
-const saveBooksToLocalStorage = (listBooks: BookDto[]) => {
+const saveBooksToLocalStorage = (listBooks: BookDto[], key: string) => {
     const favoriteBooks: string | null = localStorage.getItem('favoriteBooks');
     if (favoriteBooks) {
-        localStorage.setItem('favoriteBooks', JSON.stringify(
+        localStorage.setItem(key, JSON.stringify(
             [...JSON.parse(favoriteBooks), ...listBooks])
         );
     } else {
-        localStorage.setItem('favoriteBooks', JSON.stringify(listBooks));
+        localStorage.setItem(key, JSON.stringify(listBooks));
     }
 }
 
 export const BookSearchPage: FC = () => {
+    const favoriteBooksKeyLocalStorage = useContext<string>(LocalStorageContext);
     const classes = useStyles();
     const [isShowSpinner, setShowSpinner] = useState<number>(0);
     const [inputValue, setInputValue] = useState<string>('');
@@ -73,7 +75,7 @@ export const BookSearchPage: FC = () => {
                 })
             }
         });
-        saveBooksToLocalStorage(listBooksToSave);
+        saveBooksToLocalStorage(listBooksToSave, favoriteBooksKeyLocalStorage);
         spinnerHide(setShowSpinner);
     };
 
@@ -128,7 +130,6 @@ export const BookSearchPage: FC = () => {
                         })}
                     </List>
             }
-
             {getSaveBtn()}
         </>
     )

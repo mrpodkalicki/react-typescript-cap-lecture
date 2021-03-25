@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {BookDto} from "../../dto/book.dto";
 import {List} from "@material-ui/core";
 import {BookItem} from "../../components/BookItem";
@@ -7,8 +7,10 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {AppSpinner, spinnerHide, spinnerShow} from "../../components/AppSpinner";
+import {LocalStorageContext} from "../AppWrapper";
 
 export const FavoriteBooksPage = () => {
+    const favoriteBooksKeyLocalStorage = useContext<string>(LocalStorageContext);
     const [isShowSpinner, setShowSpinner] = useState<number>(0);
     const [refreshList, setRefreshList] = React.useState<[]>([]);
     const [booksList, setBooksList] = React.useState<BookDto[]>([]);
@@ -35,24 +37,22 @@ export const FavoriteBooksPage = () => {
         setCheckedBoxes([...checkedBoxes]);
     };
 
-    const handleDeleteSubmit = () => {
+    const handleDeleteBtn= () => {
         const listBooksToSave: BookDto[] = [];
         booksList.forEach((itemBooks: BookDto, index: number) => {
             if (checkedBoxes.indexOf(index) === -1) {
                 listBooksToSave.push(itemBooks)
             }
         });
-        console.log(listBooksToSave)
-        localStorage.setItem('favoriteBooks', JSON.stringify(listBooksToSave));
+        localStorage.setItem(favoriteBooksKeyLocalStorage, JSON.stringify(listBooksToSave));
         setRefreshList([])
     }
-
 
     const getDeleteBtn = (): JSX.Element | void => {
         if (checkedBoxes.length > 0) {
             return (
                 <Button
-                    onClick={handleDeleteSubmit}
+                    onClick={handleDeleteBtn}
                     variant="contained"
                     color="secondary"
                     size="large"
@@ -89,7 +89,6 @@ export const FavoriteBooksPage = () => {
                         })}
                     </List>
             }
-
             {getDeleteBtn()}
         </>
     )
